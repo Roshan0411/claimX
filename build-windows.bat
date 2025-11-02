@@ -1,0 +1,1 @@
+set CI=false && cd parametric-insurance-frontend && npm install && npm run build
