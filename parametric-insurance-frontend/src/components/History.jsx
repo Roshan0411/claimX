@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
 import { useWeb3Context } from '../contexts/Web3Context';
+import TransactionUtils from '../utils/transactionUtils';
 import '../styles/components.css';
 
 const History = () => {
   const { account } = useWeb3Context();
   const [activeFilter, setActiveFilter] = useState('all');
+  const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState('');
+
+  // Show notification to user
+  const showNotification = (message, isError = false) => {
+    setNotification({ message, isError });
+    setTimeout(() => setNotification(''), 3000);
+  };
 
   const [transactions] = useState([
     {
@@ -79,8 +88,98 @@ const History = () => {
     return tx.type === activeFilter;
   });
 
+  // Handle View on Explorer button
+  const handleViewOnExplorer = (txHash) => {
+    try {
+      TransactionUtils.viewOnExplorer(txHash, 11155111); // Sepolia testnet
+      showNotification('Opening transaction in blockchain explorer...');
+    } catch (error) {
+      showNotification('Failed to open explorer link', true);
+    }
+  };
+
+  // Handle Download Receipt button
+  const handleDownloadReceipt = async (transaction) => {
+    try {
+      setLoading(true);
+      await TransactionUtils.downloadReceipt(transaction, account);
+      showNotification('Receipt downloaded successfully!');
+    } catch (error) {
+      showNotification(error.message, true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle Export to PDF button
+  const handleExportToPDF = async () => {
+    try {
+      setLoading(true);
+      await TransactionUtils.exportToPDF(filteredTransactions, account);
+      showNotification('Transaction history exported to PDF!');
+    } catch (error) {
+      showNotification(error.message, true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle Export to CSV button
+  const handleExportToCSV = async () => {
+    try {
+      setLoading(true);
+      await TransactionUtils.exportToCSV(filteredTransactions, account);
+      showNotification('Transaction history exported to CSV!');
+    } catch (error) {
+      showNotification(error.message, true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle Email Report button
+  const handleEmailReport = async () => {
+    const email = prompt('Enter your email address to receive the transaction history report:');
+    
+    if (!email) {
+      return; // User cancelled
+    }
+    
+    if (!TransactionUtils.isValidEmail(email)) {
+      showNotification('Please enter a valid email address', true);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const result = await TransactionUtils.emailReport(filteredTransactions, account, email);
+      showNotification(result.message);
+    } catch (error) {
+      showNotification(error.message, true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="history-container">
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>Processing...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Notification */}
+      {notification && (
+        <div className={`notification ${notification.isError ? 'error' : 'success'}`}>
+          {notification.message}
+        </div>
+      )}
+
       <div className="history-header">
         <h1>Transaction History</h1>
         <p>Account: {account?.substring(0, 6)}...{account?.substring(38)}</p>
@@ -171,8 +270,20 @@ const History = () => {
                     </div>
                   </div>
                   <div className="transaction-actions">
-                    <button className="btn-secondary">View on Explorer</button>
-                    <button className="btn-secondary">Download Receipt</button>
+                    <button 
+                      className="btn-secondary"
+                      onClick={() => handleViewOnExplorer(transaction.txHash)}
+                      disabled={loading}
+                    >
+                      View on Explorer
+                    </button>
+                    <button 
+                      className="btn-secondary"
+                      onClick={() => handleDownloadReceipt(transaction)}
+                      disabled={loading}
+                    >
+                      Download Receipt
+                    </button>
                   </div>
                 </div>
               </div>
@@ -184,10 +295,31 @@ const History = () => {
       <div className="export-section">
         <h2>Export Options</h2>
         <div className="export-buttons">
-          <button className="btn-primary">📄 Export to PDF</button>
-          <button className="btn-secondary">📊 Export to CSV</button>
-          <button className="btn-secondary">📧 Email Report</button>
+          <button 
+            className="btn-primary"
+            onClick={handleExportToPDF}
+            disabled={loading || filteredTransactions.length === 0}
+          >
+            📄 Export to PDF
+          </button>
+          <button 
+            className="btn-secondary"
+            onClick={handleExportToCSV}
+            disabled={loading || filteredTransactions.length === 0}
+          >
+            📊 Export to CSV
+          </button>
+          <button 
+            className="btn-secondary"
+            onClick={handleEmailReport}
+            disabled={loading || filteredTransactions.length === 0}
+          >
+            📧 Email Report
+          </button>
         </div>
+        {filteredTransactions.length === 0 && (
+          <p className="export-notice">No transactions to export with current filter</p>
+        )}
       </div>
     </div>
   );
