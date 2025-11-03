@@ -3,9 +3,10 @@ import { useWeb3Context } from '../contexts/Web3Context';
 import { useContract } from '../hooks/useContract';
 import PolicyCard from './PolicyCard';
 import '../styles/components.css';
+import { getUserPoliciesFromAPI } from '../services/api';
 
 const PolicyList = ({ refresh }) => {
-  const { isConnected } = useWeb3Context();
+  const { isConnected, account } = useWeb3Context();
   const { getUserPolicies } = useContract();
   const [policies, setPolicies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,8 +20,42 @@ const PolicyList = ({ refresh }) => {
   const loadPolicies = async () => {
     try {
       setLoading(true);
-      const data = await getUserPolicies();
-      setPolicies(data);
+      // Try fetching policies directly from the smart contract first
+      let data = [];
+      try {
+        data = await getUserPolicies();
+      } catch (err) {
+        console.warn('Contract call failed, will try backend API:', err);
+      }
+
+      // If contract returned nothing (or on error), fall back to backend API
+      if (!data || data.length === 0) {
+        if (account) {
+          try {
+            const apiRes = await getUserPoliciesFromAPI(account);
+            if (apiRes && apiRes.success && Array.isArray(apiRes.data)) {
+              // backend returns policies with possibly different field names
+              data = apiRes.data.map((p) => ({
+                policyId: p.policyId || p.policyId?.toString?.() || p.id,
+                policyholder: p.policyholder || p.policyholder,
+                coverageAmount: p.coverageAmount || p.coverageAmount,
+                premium: p.premium || p.premium,
+                startDate: p.startDate || p.startDate,
+                endDate: p.endDate || p.endDate,
+                eventType: p.eventType || p.eventType,
+                eventParameters: p.eventParameters || p.eventParameters || p.parametersData,
+                isActive: p.isActive,
+                claimed: p.claimed,
+                claimAmount: p.claimAmount || p.claimAmount
+              }));
+            }
+          } catch (apiErr) {
+            console.warn('Backend API also failed to return policies:', apiErr);
+          }
+        }
+      }
+
+      setPolicies(data || []);
     } catch (error) {
       console.error('Error loading policies:', error);
     } finally {

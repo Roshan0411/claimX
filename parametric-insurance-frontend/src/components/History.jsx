@@ -115,7 +115,7 @@ const History = () => {
   const handleExportToPDF = async () => {
     try {
       setLoading(true);
-      await TransactionUtils.exportToPDF(filteredTransactions, account);
+      await TransactionUtils.exportToPDF(filteredTransactions, account, activeFilter);
       showNotification('Transaction history exported to PDF!');
     } catch (error) {
       showNotification(error.message, true);
@@ -128,7 +128,7 @@ const History = () => {
   const handleExportToCSV = async () => {
     try {
       setLoading(true);
-      await TransactionUtils.exportToCSV(filteredTransactions, account);
+      await TransactionUtils.exportToCSV(filteredTransactions, account, activeFilter);
       showNotification('Transaction history exported to CSV!');
     } catch (error) {
       showNotification(error.message, true);
@@ -152,7 +152,7 @@ const History = () => {
 
     try {
       setLoading(true);
-      const result = await TransactionUtils.emailReport(filteredTransactions, account, email);
+      const result = await TransactionUtils.emailReport(filteredTransactions, account, email, activeFilter);
       showNotification(result.message);
     } catch (error) {
       showNotification(error.message, true);

@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: parametric-insurance-backend
+    env: node
+    region: oregon
+    branch: main
+    plan: free
+    buildCommand: "cd parametric-insurance-backend && npm install"
+    startCommand: "cd parametric-insurance-backend && npm start"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"

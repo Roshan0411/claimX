@@ -11,10 +11,11 @@ dotenv.config();
 const policyRoutes = require('../parametric-insurance-backend/src/routes/policy.routes');
 const claimRoutes = require('../parametric-insurance-backend/src/routes/claim.routes');
 const oracleRoutes = require('../parametric-insurance-backend/src/routes/oracle.routes');
-const adminRoutes = require('../parametric-insurance-backend/src/routes/admin.routes');
 const userRoutes = require('../parametric-insurance-backend/src/routes/user.routes');
+const adminRoutes = require('../parametric-insurance-backend/src/routes/admin.routes');
 const analyticsRoutes = require('../parametric-insurance-backend/src/routes/analytics.routes');
 const settingsRoutes = require('../parametric-insurance-backend/src/routes/settings.routes');
+const reportsRoutes = require('../parametric-insurance-backend/src/routes/reports.routes');
 
 // Import middleware
 const errorMiddleware = require('../parametric-insurance-backend/src/middleware/error.middleware');
@@ -38,6 +39,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

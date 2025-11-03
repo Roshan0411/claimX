@@ -40,7 +40,7 @@
     "REACT_APP_CHAIN_NAME": "Sepolia",
     "REACT_APP_RPC_URL": "https://sepolia.infura.io/v3/1cdfb0cdbac040b89344b6c8df937f89",
     "REACT_APP_CONTRACT_ADDRESS": "0x8B78C834a438Ec7f566806cf61aCfc80eDf69e81",
-    "REACT_APP_BACKEND_URL": "https://parametric-insurance.vercel.app"
+  "REACT_APP_BACKEND_URL": ""
   },
   "build": {
     "env": {
@@ -49,7 +49,7 @@
       "REACT_APP_CHAIN_NAME": "Sepolia", 
       "REACT_APP_RPC_URL": "https://sepolia.infura.io/v3/1cdfb0cdbac040b89344b6c8df937f89",
       "REACT_APP_CONTRACT_ADDRESS": "0x8B78C834a438Ec7f566806cf61aCfc80eDf69e81",
-      "REACT_APP_BACKEND_URL": "https://parametric-insurance.vercel.app"
+  "REACT_APP_BACKEND_URL": ""
     }
   }
 }

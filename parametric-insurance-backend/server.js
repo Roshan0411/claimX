@@ -15,6 +15,7 @@ const userRoutes = require('./src/routes/user.routes');
 const adminRoutes = require('./src/routes/admin.routes');
 const analyticsRoutes = require('./src/routes/analytics.routes');
 const settingsRoutes = require('./src/routes/settings.routes');
+const reportsRoutes = require('./src/routes/reports.routes');
 
 // Import middleware
 const errorMiddleware = require('./src/middleware/error.middleware');
@@ -36,6 +37,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

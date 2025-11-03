@@ -18,7 +18,11 @@
     "form-data": "^4.0.4",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    
     "morgan": "^1.10.0",
+    "nodemailer": "^6.9.3",
+    "multer": "^1.4.5-lts.1",
+    "formidable": "^3.5.0",
     "web3": "^4.2.0"
   },
   "devDependencies": {
