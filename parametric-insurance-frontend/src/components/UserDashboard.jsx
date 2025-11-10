@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useWeb3Context } from '../contexts/Web3Context';
 import '../styles/components.css';
 
-const UserDashboard = () => {
+const UserDashboard = ({ onNavigate }) => {
   const { account, isConnected } = useWeb3Context();
   const [stats, setStats] = useState({
     totalPolicies: 3,
@@ -24,6 +24,30 @@ const UserDashboard = () => {
     { id: 'view-policies', title: 'View Policies', icon: '📄', description: 'Manage your policies' },
     { id: 'check-weather', title: 'Weather Oracle', icon: '🌦️', description: 'Check weather data' },
   ]);
+
+  const handleQuickAction = (actionId) => {
+    if (!onNavigate) {
+      console.warn('onNavigate prop not provided to UserDashboard');
+      return;
+    }
+    
+    switch (actionId) {
+      case 'create-policy':
+        onNavigate('create-policy');
+        break;
+      case 'submit-claim':
+        onNavigate('submit-claim');
+        break;
+      case 'view-policies':
+        onNavigate('policies');
+        break;
+      case 'check-weather':
+        onNavigate('oracle-panel');
+        break;
+      default:
+        console.warn('Unknown action:', actionId);
+    }
+  };
 
   return (
     <div className="user-dashboard">
@@ -88,7 +112,12 @@ const UserDashboard = () => {
                 <div className="action-icon">{action.icon}</div>
                 <h3>{action.title}</h3>
                 <p>{action.description}</p>
-                <button className="action-button">Get Started</button>
+                <button 
+                  className="action-button"
+                  onClick={() => handleQuickAction(action.id)}
+                >
+                  Get Started
+                </button>
               </div>
             ))}
           </div>

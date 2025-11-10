@@ -49,9 +49,9 @@ const Dashboard = ({ userRole, onLogout }) => {
 
     switch (activeSection) {
       case 'dashboard':
-        return <UserDashboard />;
+        return <UserDashboard onNavigate={setActiveSection} />;
       case 'admin-dashboard':
-        return isAdmin ? <AdminDashboard /> : <UserDashboard />;
+        return isAdmin ? <AdminDashboard /> : <UserDashboard onNavigate={setActiveSection} />;
       case 'policies':
       case 'all-policies':
       case 'create-policy':
@@ -65,15 +65,15 @@ const Dashboard = ({ userRole, onLogout }) => {
       case 'profile':
         return <Profile />;
       case 'oracle-panel':
-        return isAdmin ? <OraclePanel /> : <UserDashboard />;
+        return <OraclePanel isAdmin={isAdmin} />;
       case 'analytics':
-        return isAdmin ? <Analytics /> : <UserDashboard />;
+        return isAdmin ? <Analytics /> : <UserDashboard onNavigate={setActiveSection} />;
       case 'users':
-        return isAdmin ? <UserManagement /> : <UserDashboard />;
+        return isAdmin ? <UserManagement /> : <UserDashboard onNavigate={setActiveSection} />;
       case 'settings':
         return <Settings />;
       default:
-        return <UserDashboard />;
+        return <UserDashboard onNavigate={setActiveSection} />;
     }
   };
 

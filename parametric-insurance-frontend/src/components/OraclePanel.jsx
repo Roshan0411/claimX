@@ -3,12 +3,12 @@ import { useWeb3Context } from '../contexts/Web3Context';
 import { toast } from 'react-toastify';
 import '../styles/components.css';
 
-const OraclePanel = () => {
+const OraclePanel = ({ isAdmin = false }) => {
   const { account } = useWeb3Context();
   const [oracleData, setOracleData] = useState(null);
   const [dataSources, setDataSources] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState(isAdmin ? 'overview' : 'weather');
   const [showModal, setShowModal] = useState(null);
   const [selectedOracle, setSelectedOracle] = useState(null);
 
@@ -228,29 +228,45 @@ const OraclePanel = () => {
 
       {/* Navigation Tabs */}
       <div className="tab-navigation">
+        {isAdmin && (
+          <>
+            <button 
+              className={`tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
+              onClick={() => setActiveTab('overview')}
+            >
+              📊 Overview
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'oracles' ? 'active' : ''}`}
+              onClick={() => setActiveTab('oracles')}
+            >
+              🔮 Oracle Nodes
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'sources' ? 'active' : ''}`}
+              onClick={() => setActiveTab('sources')}
+            >
+              🌐 Data Sources
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'performance' ? 'active' : ''}`}
+              onClick={() => setActiveTab('performance')}
+            >
+              📈 Performance
+            </button>
+          </>
+        )}
         <button 
-          className={`tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
-          onClick={() => setActiveTab('overview')}
+          className={`tab-btn ${activeTab === 'weather' ? 'active' : ''}`}
+          onClick={() => setActiveTab('weather')}
         >
-          📊 Overview
+          🌦️ Weather Data
         </button>
         <button 
-          className={`tab-btn ${activeTab === 'oracles' ? 'active' : ''}`}
-          onClick={() => setActiveTab('oracles')}
+          className={`tab-btn ${activeTab === 'flight' ? 'active' : ''}`}
+          onClick={() => setActiveTab('flight')}
         >
-          🔮 Oracle Nodes
-        </button>
-        <button 
-          className={`tab-btn ${activeTab === 'sources' ? 'active' : ''}`}
-          onClick={() => setActiveTab('sources')}
-        >
-          🌐 Data Sources
-        </button>
-        <button 
-          className={`tab-btn ${activeTab === 'performance' ? 'active' : ''}`}
-          onClick={() => setActiveTab('performance')}
-        >
-          📈 Performance
+          ✈️ Flight Data
         </button>
       </div>
 
@@ -494,6 +510,90 @@ const OraclePanel = () => {
                   <div className="time-metric">
                     <span>Exchange:</span>
                     <span>2.1s</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Weather Data Tab */}
+        {activeTab === 'weather' && (
+          <div className="weather-section">
+            <h3>🌦️ Weather Oracle Data</h3>
+            <div className="weather-query-form">
+              <div className="form-group">
+                <label>Location:</label>
+                <input type="text" placeholder="Enter city or coordinates" />
+              </div>
+              <div className="form-group">
+                <label>Date Range:</label>
+                <input type="date" />
+                <span> to </span>
+                <input type="date" />
+              </div>
+              <button className="btn btn-primary">Query Weather Data</button>
+            </div>
+            <div className="weather-results">
+              <div className="weather-card">
+                <h4>Current Weather</h4>
+                <div className="weather-info">
+                  <div className="weather-item">
+                    <span>Temperature:</span>
+                    <span>22°C</span>
+                  </div>
+                  <div className="weather-item">
+                    <span>Humidity:</span>
+                    <span>65%</span>
+                  </div>
+                  <div className="weather-item">
+                    <span>Wind Speed:</span>
+                    <span>15 km/h</span>
+                  </div>
+                  <div className="weather-item">
+                    <span>Precipitation:</span>
+                    <span>0 mm</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Flight Data Tab */}
+        {activeTab === 'flight' && (
+          <div className="flight-section">
+            <h3>✈️ Flight Oracle Data</h3>
+            <div className="flight-query-form">
+              <div className="form-group">
+                <label>Flight Number:</label>
+                <input type="text" placeholder="e.g., AA1234" />
+              </div>
+              <div className="form-group">
+                <label>Date:</label>
+                <input type="date" />
+              </div>
+              <button className="btn btn-primary">Query Flight Data</button>
+            </div>
+            <div className="flight-results">
+              <div className="flight-card">
+                <h4>Flight Status</h4>
+                <div className="flight-info">
+                  <div className="flight-item">
+                    <span>Status:</span>
+                    <span className="status on-time">On Time</span>
+                  </div>
+                  <div className="flight-item">
+                    <span>Departure:</span>
+                    <span>14:30 UTC</span>
+                  </div>
+                  <div className="flight-item">
+                    <span>Arrival:</span>
+                    <span>18:45 UTC</span>
+                  </div>
+                  <div className="flight-item">
+                    <span>Delay:</span>
+                    <span>0 minutes</span>
                   </div>
                 </div>
               </div>
