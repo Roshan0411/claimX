@@ -103,10 +103,10 @@ class UserController {
         role: 'user',
         status: 'active',
         profile: {
-          name: 'John Doe',
-          email: 'john.doe@example.com',
-          phone: '+1-555-0123',
-          location: 'New York, USA'
+          name: 'Ripan sahu',
+          email: 'ripansahu65@gmail.com',
+          phone: '7848051670',
+          location: 'odisha india'
         },
         statistics: {
           totalPolicies: 3,
