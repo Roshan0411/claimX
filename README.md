@@ -4,7 +4,7 @@ A comprehensive decentralized parametric insurance platform built on Ethereum, f
 
 ## 🚀 Live Demo
 
-**Production URL**: [https://parametric-insurance-l2e22oqp3-victolifto65-1130s-projects.vercel.app](https://parametric-insurance-l2e22oqp3-victolifto65-1130s-projects.vercel.app)
+**Production URL**: [https://parametric-insurance-o2oyivc8y-victolifto65-1130s-projects.vercel.app](https://parametric-insurance-o2oyivc8y-victolifto65-1130s-projects.vercel.app)
 
 ## 📋 Features
 
